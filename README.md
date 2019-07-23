@@ -22,7 +22,7 @@
 
 **个人公众号：是不是很酷**：）
 
-![QRCode](qrcode.png)
+![QRCode](https://git.imooc.com/coding-370/Play-with-Graph-Theory-Algorithm/raw/master/qrcode.png)
 
 
 ## 更多说明

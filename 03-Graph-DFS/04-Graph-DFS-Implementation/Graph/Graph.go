@@ -36,7 +36,7 @@ func (g *Graph) HasEdge(v, w int) bool {
 	return g.adj[v].Contains(w)
 }
 
-func (g *Graph) Adj(v int) tree.BST {
+func (g *Graph) Adj(v int) interface{}{
 	g.validateVertex(v)
 
 	return g.adj[v]

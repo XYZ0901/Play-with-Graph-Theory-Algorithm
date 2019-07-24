@@ -2,6 +2,7 @@ package main
 
 import (
 	"Play-with-Graph-Theory-Algorithm/03-Graph-DFS/04-Graph-DFS-Implementation/Graph"
+	"Play-with-Graph-Theory-Algorithm/03-Graph-DFS/04-Graph-DFS-Implementation/tree"
 	"fmt"
 )
 
@@ -26,9 +27,9 @@ func (g *GraphDFS) Dfs() {
 func (g *GraphDFS) dfs(v int, visited []bool, list *[]int) {
 	visited[v] = true
 	*list = append(*list, v)
-	adj := g.g.Adj(v)
-	a := adj.Traverse()
-	for _, value := range a {
+	adj := g.g.Adj(v).(tree.BST)
+
+	for _, value := range adj.Traverse() {
 		if !visited[value] {
 			g.dfs(value, visited, list)
 		}

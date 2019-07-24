@@ -2,7 +2,6 @@ package tree
 
 import (
 	"fmt"
-	"strconv"
 )
 
 type BST struct {
@@ -44,8 +43,8 @@ func (bst *BST) Contains(e int) bool {
 	return contains(bst.root, e)
 }
 
-func (bst *BST) Traverse() string {
-	res := ""
+func (bst *BST) Traverse() []int {
+	res := []int{}
 	traverse(bst.root,&res)
 	return res
 }
@@ -92,13 +91,15 @@ func contains(node *node, e int) bool {
 	return false
 }
 
-func traverse(node *node,res *string) {
-	if node.left!=nil {
-		traverse(node.left,res)
-	}
-	*res += strconv.Itoa(node.e) + " "
-	if node.right!=nil {
-		traverse(node.right,res)
+func traverse(node *node,res *[]int) {
+	if node!=nil {
+		if node.left!=nil {
+			traverse(node.left,res)
+		}
+		*res = append(*res, node.e)
+		if node.right!=nil {
+			traverse(node.right,res)
+		}
 	}
 }
 

@@ -1,9 +1,9 @@
-package main
+package Graph
 
 import (
+	"Play-with-Graph-Theory-Algorithm/03-Graph-DFS/05-Graph-DFS-Improvement/tree"
 	"bufio"
 	"fmt"
-	"Play-with-Graph-Theory-Algorithm/02-Graph-Basics/09-Graph-Representation-Comparation/tree"
 	"log"
 	"os"
 	"strconv"
@@ -16,35 +16,35 @@ type Graph struct {
 	adj []tree.BST
 }
 
-func (adj *Graph) validateVertex(v int) {
-	if v < 0 || v >= adj.v {
+func (g *Graph) validateVertex(v int) {
+	if v < 0 || v >= g.v {
 		log.Fatal("vertex " + strconv.Itoa(v) + " is invalid")
 	}
 }
 
-func (adj *Graph) V() int {
-	return adj.v
+func (g *Graph) V() int {
+	return g.v
 }
 
-func (adj *Graph) E() int {
-	return adj.e
+func (g *Graph) E() int {
+	return g.e
 }
 
-func (adj *Graph) HasEdge(v, w int) bool {
-	adj.validateVertex(v)
-	adj.validateVertex(w)
-	return adj.adj[v].Contains(w)
+func (g *Graph) HasEdge(v, w int) bool {
+	g.validateVertex(v)
+	g.validateVertex(w)
+	return g.adj[v].Contains(w)
 }
 
-func (adj *Graph) Adj(v int) interface{} {
-	adj.validateVertex(v)
+func (g *Graph) Adj(v int) interface{}{
+	g.validateVertex(v)
 
-	return adj.adj[v]
+	return g.adj[v]
 }
 
-func (adj *Graph) Degree(v int) int {
-	adj.validateVertex(v)
-	return adj.adj[v].Size()
+func (g *Graph) Degree(v int) int {
+	g.validateVertex(v)
+	return g.adj[v].Size()
 }
 
 func NewGraph(filename string) (*Graph) {
@@ -106,11 +106,6 @@ func (g *Graph) String() string {
 		}
 	}
 	return sb
-}
-
-func main() {
-	g := NewGraph("./02-Graph-Basics/09-Graph-Representation-Comparation/g.txt")
-	fmt.Println(g)
 }
 
 func lineNums(scanner *bufio.Scanner) (nums []int) {

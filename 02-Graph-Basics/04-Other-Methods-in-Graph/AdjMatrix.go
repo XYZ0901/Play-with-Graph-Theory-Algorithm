@@ -38,7 +38,7 @@ func (adj *AdjMatrix)Adj(v int) (res []int){
 	adj.validateVertex(v)
 
 	for i:=0;i<adj.v ;i++  {
-		if adj.adj[adj.v][i]==1 {
+		if adj.adj[v][i]==1 {
 			res = append(res, i)
 		}
 	}
@@ -68,7 +68,7 @@ func NewAdjMatrix(filename string) (*AdjMatrix) {
 			adjMatrix.e = nums[1]
 
 			for i := 0; i < adjMatrix.v; i++ {
-				tmp := make([]int, adjMatrix.e)
+				tmp := make([]int, adjMatrix.v)
 				adj = append(adj, tmp)
 			}
 			firstLine = false

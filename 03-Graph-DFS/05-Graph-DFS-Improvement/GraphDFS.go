@@ -50,7 +50,7 @@ func (g *GraphDFS)Post() []int {
 }
 
 func main() {
-	g := Graph.NewGraph("./03-Graph-DFS/04-Graph-DFS-Implementation/g.txt")
+	g := Graph.NewGraph("./03-Graph-DFS/05-Graph-DFS-Improvement/g.txt")
 	graphDFS := NewGraphDFS(g)
 	fmt.Println(graphDFS.Pre())
 	fmt.Println(graphDFS.Post())

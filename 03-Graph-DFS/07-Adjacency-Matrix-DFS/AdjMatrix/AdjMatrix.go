@@ -1,4 +1,4 @@
-package main
+package AdjMatrix
 
 import (
 	"bufio"
@@ -113,7 +113,7 @@ func (adj *AdjMatrix) String() string {
 
 func main() {
 
-	adjMatrix := NewAdjMatrix("./02-Graph-Basics/06-Adjacency-List/g.txt")
+	adjMatrix := NewAdjMatrix("./02-Graph-Basics/08-Adjacency-Set/g.txt")
 	fmt.Println(adjMatrix)
 }
 

@@ -35,15 +35,19 @@ func (adj *AdjList) HasEdge(v, w int) bool {
 	return ListContains(adj.adj[v],w)
 }
 
-func (adj *AdjList) Adj(v int) (res list.List) {
+func (adj *AdjList) Adj(v int) (res []int) {
 	adj.validateVertex(v)
 
-	return adj.adj[v]
+	for p:=adj.adj[v].Front();p!=nil;p=p.Next(){
+		res = append(res, p.Value.(int))
+	}
+
+	return
 }
 
 func (adj *AdjList) Degree(v int) int {
 	a := adj.Adj(v)
-	return a.Len()
+	return len(a)
 }
 
 func NewAdjList(filename string) (*AdjList) {

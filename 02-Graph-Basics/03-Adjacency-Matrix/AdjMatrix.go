@@ -48,7 +48,7 @@ func (adj *AdjMatrix) String() string {
 	sb += fmt.Sprintf("V = %d, E = %d\n",adj.V,adj.E)
 	for i:=0;i<adj.V ; i++ {
 		for j:=0;j<adj.V ; j++ {
-			sb += strconv.Itoa(adj.adj[i][j])+" "
+			sb += fmt.Sprint(adj.adj[i][j])+" "
 		}
 		if i< adj.V-1{
 			sb += fmt.Sprintf("\n")

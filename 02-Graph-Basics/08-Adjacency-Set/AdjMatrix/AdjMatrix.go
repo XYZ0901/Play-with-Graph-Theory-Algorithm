@@ -43,7 +43,7 @@ func (adj *AdjMatrix)Adj(v int) (res []int){
 		}
 	}
 
-	return res
+	return
 }
 
 func (adj *AdjMatrix)Degree(v int) int{
@@ -62,10 +62,12 @@ func NewAdjMatrix(filename string) (*AdjMatrix) {
 		if firstLine {
 			adjMatrix.v = nums[0]
 			if adjMatrix.v < 0 {
-				//panic("V must be non-negative")
 				log.Fatal("V must be non-negative")
 			}
 			adjMatrix.e = nums[1]
+			if adjMatrix.e < 0 {
+				log.Fatal("V must be non-negative")
+			}
 
 			for i := 0; i < adjMatrix.v; i++ {
 				tmp := make([]int, adjMatrix.v)
@@ -101,7 +103,7 @@ func (adj *AdjMatrix) String() string {
 	sb += fmt.Sprintf("V = %d, E = %d\n", adj.v, adj.e)
 	for i := 0; i < adj.v; i++ {
 		for j := 0; j < adj.v; j++ {
-			sb += strconv.Itoa(adj.adj[i][j]) + " "
+			sb += fmt.Sprint(adj.adj[i][j]) + " "
 		}
 		if i < adj.v-1 {
 			sb += fmt.Sprintf("\n")

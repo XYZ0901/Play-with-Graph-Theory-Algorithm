@@ -1,61 +1,60 @@
-package main
+package AdjList
 
 import (
 	"bufio"
+	"container/list"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
 )
 
-type AdjMatrix struct {
+type AdjList struct {
 	v   int
 	e   int
-	adj [][]int
+	adj []list.List
 }
 
-func (adj *AdjMatrix) validateVertex(v int) {
+func (adj *AdjList) validateVertex(v int) {
 	if v < 0 || v >= adj.v {
 		log.Fatal("vertex " + strconv.Itoa(v) + " is invalid")
 	}
 }
 
-func (adj *AdjMatrix) V() int {
+func (adj *AdjList) V() int {
 	return adj.v
 }
 
-func (adj *AdjMatrix) E() int {
+func (adj *AdjList) E() int {
 	return adj.e
 }
 
-func (adj *AdjMatrix) HasEdge(v, w int) bool {
+func (adj *AdjList) HasEdge(v, w int) bool {
 	adj.validateVertex(v)
 	adj.validateVertex(w)
-	return adj.adj[v][w] == 1
+	return ListContains(adj.adj[v],w)
 }
 
-func (adj *AdjMatrix)Adj(v int) (res []int){
+func (adj *AdjList) Adj(v int) (res []int) {
 	adj.validateVertex(v)
-
-	for i:=0;i<adj.v ;i++  {
-		if adj.adj[v][i]==1 {
-			res = append(res, i)
-		}
+	for p:=adj.adj[v].Front();p!=nil;p=p.Next(){
+		res = append(res, p.Value.(int))
 	}
-
 	return
 }
 
-func (adj *AdjMatrix)Degree(v int) int{
+func (adj *AdjList) Degree(v int) int {
 	return len(adj.Adj(v))
 }
 
-func NewAdjMatrix(filename string) (*AdjMatrix) {
+func NewAdjList(filename string) (*AdjList) {
+
 	fileObj, _ := os.Open(filename)
 	scann := bufio.NewScanner(fileObj)
-	adjMatrix := new(AdjMatrix)
+	adjMatrix := new(AdjList)
 	firstLine := true
-	var adj [][]int
+
+	var adj []list.List
 
 	for scann.Scan() {
 		nums := lineNums(scann)
@@ -66,13 +65,11 @@ func NewAdjMatrix(filename string) (*AdjMatrix) {
 			}
 			adjMatrix.e = nums[1]
 			if adjMatrix.e < 0 {
-				log.Fatal("V must be non-negative")
+				log.Fatal("E must be non-negative")
 			}
 
-			for i := 0; i < adjMatrix.v; i++ {
-				tmp := make([]int, adjMatrix.v)
-				adj = append(adj, tmp)
-			}
+			adj = make([]list.List, adjMatrix.v)
+
 			firstLine = false
 			continue
 		}
@@ -87,23 +84,34 @@ func NewAdjMatrix(filename string) (*AdjMatrix) {
 			log.Fatal("Self Loop is Detected!")
 		}
 
-		if adj[a][b] == 1 {
+		if ListContains(adj[a], b) {
 			log.Fatal("Parallel Edges are Detected")
 		}
 
-		adj[a][b] = 1
-		adj[b][a] = 1
+		adj[a].PushBack(b)
+		adj[b].PushBack(a)
 	}
 	adjMatrix.adj = adj
 	return adjMatrix
 }
 
-func (adj *AdjMatrix) String() string {
+// golang中没有给链表contains方法 只能自己实现
+func ListContains(a list.List, b interface{}) bool {
+	for p := a.Front(); p != nil; p = p.Next() {
+		if p.Value == b {
+			return true
+		}
+	}
+	return false
+}
+
+func (adj *AdjList) String() string {
 	sb := ""
 	sb += fmt.Sprintf("V = %d, E = %d\n", adj.v, adj.e)
 	for i := 0; i < adj.v; i++ {
-		for j := 0; j < adj.v; j++ {
-			sb += fmt.Sprint(adj.adj[i][j]) + " "
+		sb += fmt.Sprintf("%d : ",i)
+		for p := adj.adj[i].Front(); p != nil; p = p.Next() {
+			sb += strconv.Itoa(p.Value.(int)) + " "
 		}
 		if i < adj.v-1 {
 			sb += fmt.Sprintf("\n")
@@ -111,12 +119,6 @@ func (adj *AdjMatrix) String() string {
 	}
 
 	return sb
-}
-
-func main() {
-
-	adjMatrix := NewAdjMatrix("./02-Graph-Basics/04-Other-Methods-in-Graph/g.txt")
-	fmt.Println(adjMatrix)
 }
 
 func lineNums(scanner *bufio.Scanner) (nums []int) {

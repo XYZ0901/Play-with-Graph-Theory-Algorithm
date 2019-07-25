@@ -1,75 +1,76 @@
-package Graph
+package AdjMatrix
 
 import (
 	"bufio"
 	"fmt"
-	"Play-with-Graph-Theory-Algorithm/02-Graph-Basics/09-Graph-Representation-Comparation/tree"
 	"log"
 	"os"
 	"strconv"
 )
 
-// 暂时只支持无向无权图
-type Graph struct {
+type AdjMatrix struct {
 	v   int
 	e   int
-	adj []tree.BST
+	adj [][]int
 }
 
-func (g *Graph) validateVertex(v int) {
-	if v < 0 || v >= g.v {
+func (adj *AdjMatrix) validateVertex(v int) {
+	if v < 0 || v >= adj.v {
 		log.Fatal("vertex " + strconv.Itoa(v) + " is invalid")
 	}
 }
 
-func (g *Graph) V() int {
-	return g.v
+func (adj *AdjMatrix) V() int {
+	return adj.v
 }
 
-func (g *Graph) E() int {
-	return g.e
+func (adj *AdjMatrix) E() int {
+	return adj.e
 }
 
-func (g *Graph) HasEdge(v, w int) bool {
-	g.validateVertex(v)
-	g.validateVertex(w)
-	return g.adj[v].Contains(w)
+func (adj *AdjMatrix) HasEdge(v, w int) bool {
+	adj.validateVertex(v)
+	adj.validateVertex(w)
+	return adj.adj[v][w] == 1
 }
 
-func (g *Graph) Adj(v int) interface{} {
-	g.validateVertex(v)
+func (adj *AdjMatrix)Adj(v int) (res []int){
+	adj.validateVertex(v)
 
-	return g.adj[v]
+	for i:=0;i<adj.v ;i++  {
+		if adj.adj[v][i]==1 {
+			res = append(res, i)
+		}
+	}
+
+	return res
 }
 
-func (g *Graph) Degree(v int) int {
-	g.validateVertex(v)
-	return g.adj[v].Size()
+func (adj *AdjMatrix)Degree(v int) int{
+	return len(adj.Adj(v))
 }
 
-func NewGraph(filename string) (*Graph) {
-
+func NewAdjMatrix(filename string) (*AdjMatrix) {
 	fileObj, _ := os.Open(filename)
 	scann := bufio.NewScanner(fileObj)
-	adjMatrix := new(Graph)
+	adjMatrix := new(AdjMatrix)
 	firstLine := true
-
-	var adj []tree.BST
+	var adj [][]int
 
 	for scann.Scan() {
 		nums := lineNums(scann)
 		if firstLine {
 			adjMatrix.v = nums[0]
 			if adjMatrix.v < 0 {
+				//panic("V must be non-negative")
 				log.Fatal("V must be non-negative")
 			}
 			adjMatrix.e = nums[1]
-			if adjMatrix.e < 0 {
-				log.Fatal("E must be non-negative")
+
+			for i := 0; i < adjMatrix.v; i++ {
+				tmp := make([]int, adjMatrix.v)
+				adj = append(adj, tmp)
 			}
-
-			adj = make([]tree.BST, adjMatrix.v)
-
 			firstLine = false
 			continue
 		}
@@ -84,27 +85,29 @@ func NewGraph(filename string) (*Graph) {
 			log.Fatal("Self Loop is Detected!")
 		}
 
-		if adj[a].Contains(b) {
+		if adj[a][b] == 1 {
 			log.Fatal("Parallel Edges are Detected")
 		}
 
-		adj[a].Add(b)
-		adj[b].Add(a)
+		adj[a][b] = 1
+		adj[b][a] = 1
 	}
 	adjMatrix.adj = adj
 	return adjMatrix
 }
 
-func (g *Graph) String() string {
+func (adj *AdjMatrix) String() string {
 	sb := ""
-	sb += fmt.Sprintf("V = %d, E = %d\n", g.v, g.e)
-	for i := 0; i < g.v; i++ {
-		sb += fmt.Sprintf("%d : ", i)
-		sb += fmt.Sprint(g.adj[i].Traverse())
-		if i < g.v-1 {
+	sb += fmt.Sprintf("V = %d, E = %d\n", adj.v, adj.e)
+	for i := 0; i < adj.v; i++ {
+		for j := 0; j < adj.v; j++ {
+			sb += strconv.Itoa(adj.adj[i][j]) + " "
+		}
+		if i < adj.v-1 {
 			sb += fmt.Sprintf("\n")
 		}
 	}
+
 	return sb
 }
 

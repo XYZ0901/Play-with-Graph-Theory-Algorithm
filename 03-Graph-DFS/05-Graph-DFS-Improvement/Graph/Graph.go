@@ -36,10 +36,10 @@ func (g *Graph) HasEdge(v, w int) bool {
 	return g.adj[v].Contains(w)
 }
 
-func (g *Graph) Adj(v int) interface{}{
+func (g *Graph) Adj(v int) []int {
 	g.validateVertex(v)
 
-	return g.adj[v]
+	return g.adj[v].Traverse()
 }
 
 func (g *Graph) Degree(v int) int {

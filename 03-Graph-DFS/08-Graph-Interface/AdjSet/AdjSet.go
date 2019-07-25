@@ -1,57 +1,55 @@
-package _2_dfs
+package AdjSet
 
 import (
-	"Play-with-Graph-Theory-Algorithm/02-Graph-Basics/09-Graph-Representation-Comparation/tree"
 	"bufio"
 	"fmt"
+	"Play-with-Graph-Theory-Algorithm/02-Graph-Basics/08-Adjacency-Set/tree"
 	"log"
 	"os"
 	"strconv"
 )
 
-// 暂时只支持无向无权图
-type Graph struct {
+type AdjSet struct {
 	v   int
 	e   int
 	adj []tree.BST
 }
 
-func (g *Graph) validateVertex(v int) {
-	if v < 0 || v >= g.v {
+func (adj *AdjSet) validateVertex(v int) {
+	if v < 0 || v >= adj.v {
 		log.Fatal("vertex " + strconv.Itoa(v) + " is invalid")
 	}
 }
 
-func (g *Graph) V() int {
-	return g.v
+func (adj *AdjSet) V() int {
+	return adj.v
 }
 
-func (g *Graph) E() int {
-	return g.e
+func (adj *AdjSet) E() int {
+	return adj.e
 }
 
-func (g *Graph) HasEdge(v, w int) bool {
-	g.validateVertex(v)
-	g.validateVertex(w)
-	return g.adj[v].Contains(w)
+func (adj *AdjSet) HasEdge(v, w int) bool {
+	adj.validateVertex(v)
+	adj.validateVertex(w)
+	return adj.adj[v].Contains(w)
 }
 
-func (g *Graph) Adj(v int) tree.BST {
-	g.validateVertex(v)
-
-	return g.adj[v]
+func (adj *AdjSet) Adj(v int) []int {
+	adj.validateVertex(v)
+	return adj.adj[v].Traverse()
 }
 
-func (g *Graph) Degree(v int) int {
-	g.validateVertex(v)
-	return g.adj[v].Size()
+func (adj *AdjSet) Degree(v int) int {
+	adj.validateVertex(v)
+	return adj.adj[v].Size()
 }
 
-func NewGraph(filename string) (*Graph) {
+func NewAdjSet(filename string) (*AdjSet) {
 
 	fileObj, _ := os.Open(filename)
 	scann := bufio.NewScanner(fileObj)
-	adjMatrix := new(Graph)
+	adjMatrix := new(AdjSet)
 	firstLine := true
 
 	var adj []tree.BST
@@ -95,38 +93,17 @@ func NewGraph(filename string) (*Graph) {
 	return adjMatrix
 }
 
-func (g *Graph) String() string {
+func (adj *AdjSet) String() string {
 	sb := ""
-	sb += fmt.Sprintf("V = %d, E = %d\n", g.v, g.e)
-	for i := 0; i < g.v; i++ {
+	sb += fmt.Sprintf("V = %d, E = %d\n", adj.v, adj.e)
+	for i := 0; i < adj.v; i++ {
 		sb += fmt.Sprintf("%d : ", i)
-		sb += fmt.Sprint(g.adj[i].Traverse())
-		if i < g.v-1 {
+		sb += fmt.Sprint(adj.adj[i].Traverse())
+		if i < adj.v-1 {
 			sb += fmt.Sprintf("\n")
 		}
 	}
 	return sb
-}
-
-func (g *Graph)Dfs() []int{
-	visited := []bool{}
-	list := []int{}
-	for i:=0;i<g.v ;i++  {
-		visited = append(visited, false)
-	}
-	g.dfs(0,visited,&list)
-	return list
-}
-
-func (g *Graph)dfs(v int,visited []bool,list *[]int){
-	visited[v] = true
-	*list = append(*list, v)
-	a := g.adj[v].Traverse()
-	for _,value := range a{
-		if !visited[value] {
-			g.dfs(value,visited,list)
-		}
-	}
 }
 
 func lineNums(scanner *bufio.Scanner) (nums []int) {

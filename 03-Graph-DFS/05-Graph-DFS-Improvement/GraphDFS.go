@@ -2,7 +2,6 @@ package main
 
 import (
 	"Play-with-Graph-Theory-Algorithm/03-Graph-DFS/05-Graph-DFS-Improvement/Graph"
-	"Play-with-Graph-Theory-Algorithm/03-Graph-DFS/05-Graph-DFS-Improvement/tree"
 	"fmt"
 )
 
@@ -23,7 +22,7 @@ func NewGraphDFS(g *Graph.Graph) (*GraphDFS) {
 
 func (g *GraphDFS) Dfs() {
 	for i := 0; i < g.g.V(); i++ {
-		if g.visited[i] != true {
+		if !g.visited[i] {
 			g.dfs(i)
 		}
 	}
@@ -31,9 +30,9 @@ func (g *GraphDFS) Dfs() {
 
 func (g *GraphDFS) dfs(v int) {
 	g.visited[v] = true
-	adj := g.g.Adj(v).(tree.BST)
+	adj := g.g.Adj(v)
 	g.pre = append(g.pre, v) // 先序
-	for _, value := range adj.Traverse() {
+	for _, value := range adj {
 		if !g.visited[value] {
 			g.dfs(value)
 		}
@@ -41,11 +40,11 @@ func (g *GraphDFS) dfs(v int) {
 	g.post = append(g.post, v) // 后序
 }
 
-func (g *GraphDFS)Pre() []int {
+func (g *GraphDFS) Pre() []int {
 	return g.pre
 }
 
-func (g *GraphDFS)Post() []int {
+func (g *GraphDFS) Post() []int {
 	return g.post
 }
 

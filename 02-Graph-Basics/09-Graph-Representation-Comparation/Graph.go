@@ -113,6 +113,7 @@ func main() {
 	fmt.Println(g)
 }
 
+// 简单封装 读取每一行以" "为分割的数字
 func lineNums(scanner *bufio.Scanner) (nums []int) {
 	line := scanner.Bytes()
 	num := make([]byte, 0)

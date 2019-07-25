@@ -111,12 +111,6 @@ func (adj *AdjMatrix) String() string {
 	return sb
 }
 
-func main() {
-
-	adjMatrix := NewAdjMatrix("./02-Graph-Basics/08-Adjacency-Set/g.txt")
-	fmt.Println(adjMatrix)
-}
-
 func lineNums(scanner *bufio.Scanner) (nums []int) {
 	line := scanner.Bytes()
 	num := make([]byte, 0)

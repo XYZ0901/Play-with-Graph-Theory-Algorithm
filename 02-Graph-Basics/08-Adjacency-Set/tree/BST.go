@@ -43,8 +43,8 @@ func (bst *BST) Contains(e int) bool {
 	return contains(bst.root, e)
 }
 
-func (bst *BST) Traverse() string {
-	res := ""
+func (bst *BST) Traverse() []int {
+	res := []int{}
 	traverse(bst.root,&res)
 	return res
 }

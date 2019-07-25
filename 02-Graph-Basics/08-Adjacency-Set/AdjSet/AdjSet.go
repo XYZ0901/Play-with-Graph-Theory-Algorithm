@@ -35,9 +35,9 @@ func (adj *AdjSet) HasEdge(v, w int) bool {
 	return adj.adj[v].Contains(w)
 }
 
-func (adj *AdjSet) Adj(v int) interface{} {
+func (adj *AdjSet) Adj(v int) []int {
 	adj.validateVertex(v)
-	return adj.adj[v]
+	return adj.adj[v].Traverse()
 }
 
 func (adj *AdjSet) Degree(v int) int {
@@ -98,7 +98,7 @@ func (adj *AdjSet) String() string {
 	sb += fmt.Sprintf("V = %d, E = %d\n", adj.v, adj.e)
 	for i := 0; i < adj.v; i++ {
 		sb += fmt.Sprintf("%d : ", i)
-		sb += adj.adj[i].Traverse()
+		sb += fmt.Sprint(adj.adj[i].Traverse())
 		if i < adj.v-1 {
 			sb += fmt.Sprintf("\n")
 		}
